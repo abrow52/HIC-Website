@@ -14,8 +14,8 @@
 
   <body class="bg-body-tertiary">
     <!--Navbar -->
-    <header data-bs-theme="dark">
-      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <header>
+      <nav class="navbar navbar-expand-md fixed-top">
         <div class="container-fluid">
           <a class="navbar-brand" href="../index.html">The Black Squirrel Cafe |</a>
           <button
@@ -53,17 +53,6 @@
                 <a class="nav-link" href="../location/index.html">Location</a>
               </li>
             </ul>
-            <form class="d-flex" role="search">
-              <input
-                class="form-control me-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button class="btn btn-outline-success" type="submit">
-                Search
-              </button>
-            </form>
           </div>
         </div>
       </nav>
@@ -195,26 +184,27 @@
 
               <div class="col-md-5">
                 <label for="country" class="form-label">City</label>
-                <select class="form-select" id="country" required>
-                  <option value="">Choose...</option>
-                  <option>Kent</option>
-                  <option>Akron</option>
-                  <option>Stow</option>
-                </select>
-                <div class="invalid-feedback">
-                  Please select a valid city
-                </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="city"
+                  placeholder=""
+                  required
+                />
+                <div class="invalid-feedback">City required.</div>
               </div>
 
               <div class="col-md-4">
                 <label for="state" class="form-label">State</label>
-                <select class="form-select" id="state" required>
-                  <option value="">Choose...</option>
-                  <option>Ohio</option>
-                </select>
-                <div class="invalid-feedback">
-                  Please provide a valid state.
-                </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="State"
+                  placeholder=""
+                  required
+                />
+                <div class="invalid-feedback">State required.</div>
+              </div>
               </div>
 
               <div class="col-md-3">
