@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="" />
+    <meta name="description" content="Find and select your Black Squirrel Cafe location" />
     <meta
       name="author"
-      content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
+      content="Black Squirrel Cafe Team"
     />
     <meta name="generator" content="Astro v5.13.2" />
-    <title>Carousel Template · Bootstrap v5.3</title>
+    <title>Store Locations - The Black Squirrel Cafe</title>
     <link
       rel="canonical"
       href="https://getbootstrap.com/docs/5.3/examples/carousel/"
@@ -17,7 +17,10 @@
     <script src="../assets/js/color-modes.js"></script>
     <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet" />
     <meta name="theme-color" content="#712cf9" />
-    <link href="carousel.css" rel="stylesheet" />
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -30,6 +33,114 @@
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
         }
+      }
+      
+      /* Location-specific styles */
+      #map {
+        height: 400px;
+        width: 100%;
+        border: 2px solid #dee2e6;
+        border-radius: 8px;
+        z-index: 1;
+      }
+      
+      .location-card {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .location-card:hover {
+        border-color: #0d6efd;
+        box-shadow: 0 2px 8px rgba(13, 110, 253, 0.15);
+      }
+      
+      .location-card.selected {
+        border-color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.05);
+      }
+      
+      .warning-alert {
+        border-left: 4px solid #ffc107;
+        background-color: #fff3cd;
+        color: #000;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+      }
+      
+      .service-option {
+        border: 2px solid #dee2e6;
+        border-radius: 8px;
+        padding: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 1rem;
+      }
+      
+      .service-option:hover {
+        border-color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.05);
+      }
+      
+      .service-option.selected {
+        border-color: #0d6efd;
+        background-color: #0d6efd;
+        color: white;
+      }
+      
+      /* Custom marker styles for Leaflet */
+      .cafe-marker {
+        background-color: #8B4513;
+        border: 3px solid #fff;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        cursor: pointer;
+      }
+      
+      .cafe-marker-selected {
+        background-color: #0d6efd;
+        border: 3px solid #fff;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        cursor: pointer;
+      }
+      
+      .user-marker {
+        background-color: #28a745;
+        border: 3px solid #fff;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      }
+      
+      .location-info {
+        background: var(--bs-body-bg);
+        color: var(--bs-body-color);
+        border: 1px solid var(--bs-border-color);
+        border-radius: 8px;
+        padding: 1rem;
+        box-shadow: 0 2px 4px var(--bs-box-shadow);
       }
       .b-example-divider {
         width: 100%;
@@ -192,7 +303,7 @@
     <header data-bs-theme="dark">
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Carousel</a>
+          <a class="navbar-brand">The Black Squirrel Cafe | </a>
           <button
             class="navbar-toggler"
             type="button"
@@ -207,11 +318,23 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link" href="../index.html">Home</a>
               </li>
-              <li class="nav-item"><a class="nav-link" href="#">Link</a></li>
               <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                <a class="nav-link" href="../dropdowns/menu.html">Menu</a>
+              </li>
+              <li class="nav-item"><a class="nav-link" href="../checkout/index.html">Checkout</a></li>
+              <li class="nav-item">
+                <a class="nav-link" href="../carousel/rewards.html">Promotions</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="../carousel/events.html">Events</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="../about/index.html">About Us</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Location</a>
               </li>
             </ul>
             <form class="d-flex" role="search">
@@ -230,333 +353,210 @@
       </nav>
     </header>
     <main>
-      <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-          <button
-            type="button"
-            data-bs-target="#myCarousel"
-            data-bs-slide-to="0"
-            class="active"
-            aria-current="true"
-            aria-label="Slide 1"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#myCarousel"
-            data-bs-slide-to="1"
-            aria-label="Slide 2"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#myCarousel"
-            data-bs-slide-to="2"
-            aria-label="Slide 3"
-          ></button>
+      <div class="container marketing" style="padding-top: 80px;">
+        <!-- About Us Section -->
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+            <h1 class="display-4 fw-bold mb-4">Find Your Black Squirrel Cafe</h1>
+            <p class="lead mb-5">Search for nearby locations and choose how you'd like to order</p>
+          </div>
         </div>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <svg
-              aria-hidden="true"
-              class="bd-placeholder-img"
-              height="100%"
-              preserveAspectRatio="xMidYMid slice"
-              width="100%"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-color)"
-              ></rect>
-            </svg>
-            <div class="container">
-              <div class="carousel-caption text-start">
-                <h1>Example headline.</h1>
-                <p class="opacity-75">
-                  Some representative placeholder content for the first slide of
-                  the carousel.
-                </p>
-                <p>
-                  <a class="btn btn-lg btn-primary" href="#">Sign up today</a>
-                </p>
-              </div>
+        
+        <hr class="featurette-divider" />
+        
+        <!-- Search Section -->
+        <div class="row mb-4">
+          <div class="col-md-8 mx-auto">
+            <div class="input-group">
+              <input 
+                type="text" 
+                class="form-control form-control-lg" 
+                placeholder="Search by city, area, or address (e.g., 'Kent', 'Main', 'Library')" 
+                id="locationSearch"
+                aria-label="Location search"
+              >
+              <button class="btn btn-primary btn-lg" type="button" onclick="searchLocations()">
+                Search
+              </button>
+              <button class="btn btn-outline-secondary btn-lg" type="button" onclick="showAllLocations()">
+                Show All
+              </button>
             </div>
-          </div>
-          <div class="carousel-item">
-            <svg
-              aria-hidden="true"
-              class="bd-placeholder-img"
-              height="100%"
-              preserveAspectRatio="xMidYMid slice"
-              width="100%"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-color)"
-              ></rect>
-            </svg>
-            <div class="container">
-              <div class="carousel-caption">
-                <h1>Another example headline.</h1>
-                <p>
-                  Some representative placeholder content for the second slide
-                  of the carousel.
-                </p>
-                <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <svg
-              aria-hidden="true"
-              class="bd-placeholder-img"
-              height="100%"
-              preserveAspectRatio="xMidYMid slice"
-              width="100%"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-color)"
-              ></rect>
-            </svg>
-            <div class="container">
-              <div class="carousel-caption text-end">
-                <h1>One more for good measure.</h1>
-                <p>
-                  Some representative placeholder content for the third slide of
-                  this carousel.
-                </p>
-                <p>
-                  <a class="btn btn-lg btn-primary" href="#">Browse gallery</a>
-                </p>
-              </div>
+            <div class="text-center mt-2">
+              <small class="text-muted">Try: "Kent", "Main", "Library"</small>
             </div>
           </div>
         </div>
-        <button
-          class="carousel-control-prev"
-          type="button"
-          data-bs-target="#myCarousel"
-          data-bs-slide="prev"
-        >
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button
-          class="carousel-control-next"
-          type="button"
-          data-bs-target="#myCarousel"
-          data-bs-slide="next"
-        >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-      </div>
-      <!-- Marketing messaging and featurettes
-  ================================================== -->
-      <!-- Wrap the rest of the page in another container to center all the content. -->
-      <div class="container marketing">
-        <!-- Three columns of text below the carousel -->
+        
+        <!-- Map and Results Section -->
         <div class="row">
+          <!-- Map Column -->
+          <div class="col-lg-8 mb-4">
+            <div id="map"></div>
+          </div>
+          
+          <!-- Location List Column --> 
           <div class="col-lg-4">
-            <svg
-              aria-label="Placeholder"
-              class="bd-placeholder-img rounded-circle"
-              height="140"
-              preserveAspectRatio="xMidYMid slice"
-              role="img"
-              width="140"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Placeholder</title>
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-color)"
-              ></rect>
-            </svg>
-            <h2 class="fw-normal">Heading</h2>
-            <p>
-              Some representative placeholder content for the three columns of
-              text below the carousel. This is the first column.
-            </p>
-            <p>
-              <a class="btn btn-secondary" href="#">View details &raquo;</a>
-            </p>
-          </div>
-          <!-- /.col-lg-4 -->
-          <div class="col-lg-4">
-            <svg
-              aria-label="Placeholder"
-              class="bd-placeholder-img rounded-circle"
-              height="140"
-              preserveAspectRatio="xMidYMid slice"
-              role="img"
-              width="140"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Placeholder</title>
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-color)"
-              ></rect>
-            </svg>
-            <h2 class="fw-normal">Heading</h2>
-            <p>
-              Another exciting bit of representative placeholder content. This
-              time, we've moved on to the second column.
-            </p>
-            <p>
-              <a class="btn btn-secondary" href="#">View details &raquo;</a>
-            </p>
-          </div>
-          <!-- /.col-lg-4 -->
-          <div class="col-lg-4">
-            <svg
-              aria-label="Placeholder"
-              class="bd-placeholder-img rounded-circle"
-              height="140"
-              preserveAspectRatio="xMidYMid slice"
-              role="img"
-              width="140"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Placeholder</title>
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-color)"
-              ></rect>
-            </svg>
-            <h2 class="fw-normal">Heading</h2>
-            <p>
-              And lastly this, the third column of representative placeholder
-              content.
-            </p>
-            <p>
-              <a class="btn btn-secondary" href="#">View details &raquo;</a>
-            </p>
-          </div>
-          <!-- /.col-lg-4 -->
-        </div>
-        <!-- /.row -->
-        <!-- START THE FEATURETTES -->
-        <hr class="featurette-divider" />
-        <div class="row featurette">
-          <div class="col-md-7">
-            <h2 class="featurette-heading fw-normal lh-1">
-              First featurette heading.
-              <span class="text-body-secondary">It’ll blow your mind.</span>
-            </h2>
-            <p class="lead">
-              Some great placeholder content for the first featurette here.
-              Imagine some exciting prose here.
-            </p>
-          </div>
-          <div class="col-md-5">
-            <svg
-              aria-label="Placeholder: 500x500"
-              class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
-              height="500"
-              preserveAspectRatio="xMidYMid slice"
-              role="img"
-              width="500"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Placeholder</title>
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-bg)"
-              ></rect>
-              <text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">
-                500x500
-              </text>
-            </svg>
+            <div id="locationsList">
+              <div id="noResults" class="text-center text-muted">
+                <p>Enter a location to find nearby Black Squirrel Cafe stores</p>
+              </div>
+              
+              <!-- Sample locations (will be populated by search) -->
+              <div id="searchResults" style="display: none;">
+                <h5 class="mb-3">Nearby Locations</h5>
+                
+                <div class="location-card" data-location="1" onclick="selectLocation(1)">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <h6 class="mb-1">Black Squirrel Cafe Downtown</h6>
+                      <p class="mb-1 text-muted small">150 E Main St<br>Kent, OH 44240</p>
+                      <p class="mb-0 small"><strong>Wait Time:</strong> <span class="text-warning">8 minutes</span></p>
+                    </div>
+                    <div class="text-end">
+                      <small class="text-muted">0.5 miles</small>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="location-card" data-location="2" onclick="selectLocation(2)">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <h6 class="mb-1">Black Squirrel Cafe University</h6>
+                      <p class="mb-1 text-muted small">801 E Summit St<br>Kent, OH 44240</p>
+                      <p class="mb-0 small"><strong>Wait Time:</strong> <span class="text-success">3 minutes</span></p>
+                    </div>
+                    <div class="text-end">
+                      <small class="text-muted">1.2 miles</small>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="location-card" data-location="3" onclick="selectLocation(3)">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <h6 class="mb-1">Black Squirrel Cafe Stow</h6>
+                      <p class="mb-1 text-muted small">4301 Kent Rd<br>Stow, OH 44224</p>
+                      <p class="mb-0 small"><strong>Wait Time:</strong> <span class="text-success">2 minutes</span></p>
+                    </div>
+                    <div class="text-end">
+                      <small class="text-muted">2.1 miles</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <hr class="featurette-divider" />
-        <div class="row featurette">
-          <div class="col-md-7 order-md-2">
-            <h2 class="featurette-heading fw-normal lh-1">
-              Oh yeah, it’s that good.
-              <span class="text-body-secondary">See for yourself.</span>
-            </h2>
-            <p class="lead">
-              Another featurette? Of course. More placeholder content here to
-              give you an idea of how this layout would work with some actual
-              real-world content in place.
-            </p>
-          </div>
-          <div class="col-md-5 order-md-1">
-            <svg
-              aria-label="Placeholder: 500x500"
-              class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
-              height="500"
-              preserveAspectRatio="xMidYMid slice"
-              role="img"
-              width="500"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Placeholder</title>
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-bg)"
-              ></rect>
-              <text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">
-                500x500
-              </text>
-            </svg>
+      </div>
+      
+      <!-- Location Confirmation Section -->
+      <div id="locationConfirmation" class="container mt-5" style="display: none;">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="location-info">
+              <div class="row">
+                <div class="col-md-8">
+                  <h4 id="selectedLocationName">Black Squirrel Cafe Downtown</h4>
+                  <p id="selectedLocationAddress" class="text-muted mb-3">150 E Main St, Kent, OH 44240</p>
+                  
+                  <!-- Warnings Section -->
+                  <div id="warningsSection">
+                    <!-- Dynamic warnings will be inserted here -->
+                  </div>
+                  
+                  <div class="mb-3">
+                    <p class="mb-1"><strong>Estimated Wait Time:</strong> <span id="selectedWaitTime" class="text-warning">8 minutes</span></p>
+                    <p class="mb-0"><strong>Distance:</strong> <span id="selectedDistance">0.5 miles</span></p>
+                  </div>
+                </div>
+                <div class="col-md-4 text-end">
+                  <button class="btn btn-outline-primary btn-sm mb-2" onclick="getDirections()">
+                    📍 Get Directions
+                  </button>
+                  <button class="btn btn-outline-secondary btn-sm" onclick="changeLocation()">
+                    🔄 Change Location
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Service Selection -->
+            <div class="mt-4">
+              <h5 class="mb-3">How would you like to order?</h5>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="service-option" data-service="drive-thru" onclick="selectService('drive-thru')">
+                    <div class="mb-2">🚗</div>
+                    <h6>Drive Thru</h6>
+                    <p class="small text-muted mb-0">Stay in your car</p>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="service-option" data-service="delivery" onclick="selectService('delivery')">
+                    <div class="mb-2">🚚</div>
+                    <h6>Delivery</h6>
+                    <p class="small text-muted mb-0">We'll bring it to you</p>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="service-option" data-service="pickup" onclick="selectService('pickup')">
+                    <div class="mb-2">🏃‍♂️</div>
+                    <h6>Pick-up</h6>
+                    <p class="small text-muted mb-0">Order ahead, pick up fast</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Confirmation Button -->
+            <div class="text-center mt-4">
+              <button 
+                id="confirmLocationBtn" 
+                class="btn btn-primary btn-lg px-5" 
+                onclick="confirmLocation()" 
+                disabled
+              >
+                Confirm Location & Continue
+              </button>
+            </div>
           </div>
         </div>
-        <hr class="featurette-divider" />
-        <div class="row featurette">
-          <div class="col-md-7">
-            <h2 class="featurette-heading fw-normal lh-1">
-              And lastly, this one.
-              <span class="text-body-secondary">Checkmate.</span>
-            </h2>
-            <p class="lead">
-              And yes, this is the last block of representative placeholder
-              content. Again, not really intended to be actually read, simply
-              here to give you a better view of what this would look like with
-              some actual content. Your content.
-            </p>
-          </div>
-          <div class="col-md-5">
-            <svg
-              aria-label="Placeholder: 500x500"
-              class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
-              height="500"
-              preserveAspectRatio="xMidYMid slice"
-              role="img"
-              width="500"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Placeholder</title>
-              <rect
-                width="100%"
-                height="100%"
-                fill="var(--bs-secondary-bg)"
-              ></rect>
-              <text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">
-                500x500
-              </text>
-            </svg>
+      </div>
+      
+      <!-- Confirmation Modal -->
+      <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmationModalLabel">Order Confirmed!</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="text-center">
+                <div class="mb-3">✅</div>
+                <h6>Location & Service Confirmed</h6>
+                <p class="mb-1"><strong>Location:</strong> <span id="modalLocationName"></span></p>
+                <p class="mb-1"><strong>Service:</strong> <span id="modalServiceType"></span></p>
+                <p class="mb-3"><strong>Estimated Time:</strong> <span id="modalWaitTime"></span></p>
+                <p class="text-muted">You can now proceed to browse our menu and place your order.</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Back to Locations</button>
+              <button type="button" class="btn btn-primary" onclick="proceedToMenu()">Browse Menu</button>
+            </div>
           </div>
         </div>
-        <hr class="featurette-divider" />
-        <!-- /END THE FEATURETTES -->
       </div>
       <!-- /.container -->
+      
+      <div class="container">
+        <hr class="featurette-divider" />
+      </div>
+      
       <!-- FOOTER -->
-      <footer class="container">
+      <footer class="container mt-5 pt-4">
         <p class="float-end"><a href="#">Back to top</a></p>
         <p>
           &copy; 2017–2025 Company, Inc. &middot;
@@ -568,5 +568,537 @@
       src="../assets/dist/js/bootstrap.bundle.min.js"
       class="astro-vvvwv3sm"
     ></script>
+    
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+    
+    <script>
+      // Location data with real coordinates around Kent, Ohio
+      const locations = {
+        1: {
+          name: "Black Squirrel Cafe Library",
+          address: "1125 Risman Dr, Kent, OH 44242",
+          lat: 41.14646645315748,
+          lng: -81.34222884363092,
+          waitTime: "8 minutes",
+          waitTimeValue: 8,
+          outOfStock: ["Espresso Blend"],
+          otherWarnings: []
+        },
+        2: {
+          name: "Black Squirrel Cafe Main Street",
+          address: "1005 E Main St, Kent, OH 44240", 
+          lat: 41.15414038096881,
+          lng: -81.34472058073035,
+          waitTime: "3 minutes",
+          waitTimeValue: 3,
+          outOfStock: [],
+          otherWarnings: []
+        },
+        3: {
+          name: "Black Squirrel Cafe Acorn Alley",
+          address: "164 E Main St #203, Kent, OH 44240",
+          lat: 41.15346045092544,
+          lng: -81.35691026999143,
+          waitTime: "2 minutes",
+          waitTimeValue: 2,
+          outOfStock: [],
+          otherWarnings: ["Limited seating available"]
+        }
+      };
+      
+      // Kent, Ohio coordinates (user's default location)
+      const userLocation = {
+        lat: 41.14477475842464,
+        lng: -81.34139666280572
+      };
+      
+      // Map variables
+      let map;
+      let userMarker;
+      let cafeMarkers = {};
+      let selectedMarker = null;
+      
+      let selectedLocationId = null;
+      let selectedService = null;
+      
+      // Initialize map when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        initializeMap();
+      });
+      
+      // Initialize the map
+      function initializeMap() {
+        // Create map centered on Kent, Ohio
+        map = L.map('map').setView([userLocation.lat, userLocation.lng], 13);
+        
+        // Add simplified map tiles (CartoDB Positron)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          subdomains: 'abcd'
+        }).addTo(map);
+        
+        // Add user location marker
+        const userIcon = L.divIcon({
+          className: 'user-marker',
+          html: '📍',
+          iconSize: [25, 25],
+          iconAnchor: [12, 12]
+        });
+        
+        userMarker = L.marker([userLocation.lat, userLocation.lng], {icon: userIcon})
+          .addTo(map)
+          .bindPopup('Your Location (Kent, OH)')
+          .openPopup();
+        
+        // Calculate initial distances
+        updateDistances();
+        
+        // Add cafe markers
+        Object.keys(locations).forEach(locationId => {
+          addCafeMarker(locationId, locations[locationId]);
+        });
+      }
+      
+      // Add a cafe marker to the map
+      function addCafeMarker(locationId, location) {
+        const cafeIcon = L.divIcon({
+          className: 'cafe-marker',
+          html: '☕',
+          iconSize: [30, 30],
+          iconAnchor: [15, 15]
+        });
+        
+        const marker = L.marker([location.lat, location.lng], {icon: cafeIcon})
+          .addTo(map)
+          .bindPopup(`
+            <div class="text-center">
+              <strong>${location.name}</strong><br>
+              <small>${location.address}</small><br>
+              <small>Wait Time: ${location.waitTime}</small><br>
+              <button class="btn btn-primary btn-sm mt-1" onclick="selectLocationFromPopup(${locationId})">
+                Select This Location
+              </button>
+            </div>
+          `);
+        
+        // Store the original brown color icon
+        marker.originalIcon = cafeIcon;
+        
+        // Create blue selected icon
+        const selectedIcon = L.divIcon({
+          className: 'cafe-marker',
+          html: '☕',
+          iconSize: [30, 30],
+          iconAnchor: [15, 15],
+          style: 'background-color: #0d6efd;'
+        });
+        marker.selectedIcon = selectedIcon;
+        
+        cafeMarkers[locationId] = marker;
+      }
+      
+      // Function to handle selection from popup (needed for onclick in HTML string)
+      function selectLocationFromPopup(locationId) {
+        selectLocation(locationId);
+        // Close the popup after selection
+        if (cafeMarkers[locationId]) {
+          cafeMarkers[locationId].closePopup();
+        }
+      }
+      
+      // Calculate distance between two coordinates (Haversine formula)
+      function calculateDistance(lat1, lng1, lat2, lng2) {
+        const R = 3959; // Earth's radius in miles
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLng = (lng2 - lng1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLng/2) * Math.sin(dLng/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        const distance = R * c;
+        return Math.round(distance * 10) / 10; // Round to 1 decimal place
+      }
+      
+      // Update location distances based on user location
+      function updateDistances() {
+        Object.keys(locations).forEach(locationId => {
+          const location = locations[locationId];
+          const distance = calculateDistance(
+            userLocation.lat, userLocation.lng,
+            location.lat, location.lng
+          );
+          location.distance = distance + ' miles';
+        });
+      }
+      
+      // Search for locations
+      function searchLocations() {
+        const searchInput = document.getElementById('locationSearch');
+        const searchValue = searchInput.value.trim().toLowerCase();
+        
+        if (searchValue === '') {
+          alert('Please enter a location to search');
+          return;
+        }
+        
+        // Filter locations based on search input
+        const filteredLocations = filterLocationsBySearch(searchValue);
+        
+        if (filteredLocations.length === 0) {
+          // No matches found
+          document.getElementById('searchResults').style.display = 'none';
+          document.getElementById('noResults').innerHTML = `
+            <div class="text-center text-muted">
+              <p>No locations found for "${searchValue}"</p>
+              <p class="small">Try searching for "Kent", "Main", or "Library""</p>
+            </div>
+          `;
+          document.getElementById('noResults').style.display = 'block';
+          return;
+        }
+        
+        // Update distances from user location
+        updateDistances();
+        
+        // Show filtered search results
+        document.getElementById('noResults').style.display = 'none';
+        document.getElementById('searchResults').style.display = 'block';
+        
+        // Update location cards to show only filtered results
+        displayFilteredResults(filteredLocations, searchValue);
+        
+        // Show only matching markers on map
+        showFilteredMarkersOnMap(filteredLocations);
+      }
+      
+      // Filter locations based on search criteria
+      function filterLocationsBySearch(searchValue) {
+        const filtered = [];
+        
+        Object.keys(locations).forEach(locationId => {
+          const location = locations[locationId];
+          
+          // Check if search matches name, address, or city
+          const nameMatch = location.name.toLowerCase().includes(searchValue);
+          const addressMatch = location.address.toLowerCase().includes(searchValue);
+          
+          // Check for specific keywords
+          const keywordMatches = (
+            (searchValue.includes('downtown') && location.name.toLowerCase().includes('downtown')) ||
+            (searchValue.includes('university') && location.name.toLowerCase().includes('university')) ||
+            (searchValue.includes('stow') && location.address.toLowerCase().includes('stow')) ||
+            (searchValue.includes('kent') && location.address.toLowerCase().includes('kent')) ||
+            (searchValue.includes('main') && location.address.toLowerCase().includes('main')) ||
+            (searchValue.includes('summit') && location.address.toLowerCase().includes('summit'))
+          );
+          
+          if (nameMatch || addressMatch || keywordMatches) {
+            filtered.push({
+              id: locationId,
+              ...location
+            });
+          }
+        });
+        
+        return filtered;
+      }
+      
+      // Display filtered results in the location list
+      function displayFilteredResults(filteredLocations, searchValue) {
+        const resultsContainer = document.getElementById('searchResults');
+        
+        resultsContainer.innerHTML = `
+          <h5 class="mb-3">Search Results for "${searchValue}" (${filteredLocations.length})</h5>
+        `;
+        
+        filteredLocations.forEach(location => {
+          const locationCard = document.createElement('div');
+          locationCard.className = 'location-card';
+          locationCard.setAttribute('data-location', location.id);
+          locationCard.setAttribute('onclick', `selectLocation(${location.id})`);
+          
+          let waitTimeClass = 'text-success';
+          if (location.waitTimeValue > 5) waitTimeClass = 'text-danger';
+          else if (location.waitTimeValue > 3) waitTimeClass = 'text-warning';
+          
+          locationCard.innerHTML = `
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 class="mb-1">${location.name}</h6>
+                <p class="mb-1 text-muted small">${location.address.replace(', ', '<br>')}</p>
+                <p class="mb-0 small"><strong>Wait Time:</strong> <span class="${waitTimeClass}">${location.waitTime}</span></p>
+              </div>
+              <div class="text-end">
+                <small class="text-muted">${location.distance}</small>
+              </div>
+            </div>
+          `;
+          
+          resultsContainer.appendChild(locationCard);
+        });
+      }
+      
+      // Show only filtered markers on the map
+      function showFilteredMarkersOnMap(filteredLocations) {
+        // Hide all markers first
+        Object.keys(cafeMarkers).forEach(locationId => {
+          map.removeLayer(cafeMarkers[locationId]);
+        });
+        
+        // Show only filtered markers
+        const markersToShow = [];
+        filteredLocations.forEach(location => {
+          const marker = cafeMarkers[location.id];
+          if (marker) {
+            map.addLayer(marker);
+            markersToShow.push(marker);
+          }
+        });
+        
+        // Fit map to show filtered results
+        if (markersToShow.length > 0) {
+          const group = L.featureGroup(markersToShow);
+          group.addLayer(userMarker);
+          map.fitBounds(group.getBounds().pad(0.2));
+        }
+      }
+      
+      // Update location cards with current data
+      function updateLocationCards() {
+        Object.keys(locations).forEach(locationId => {
+          const location = locations[locationId];
+          const card = document.querySelector(`[data-location="${locationId}"]`);
+          if (card) {
+            // Update distance in the card
+            const distanceElement = card.querySelector('.text-end small');
+            if (distanceElement) {
+              distanceElement.textContent = location.distance;
+            }
+          }
+        });
+      }
+      
+      // Select a location
+      function selectLocation(locationId) {
+        selectedLocationId = locationId;
+        const location = locations[locationId];
+        
+        // Update UI selection states
+        document.querySelectorAll('.location-card').forEach(card => {
+          card.classList.remove('selected');
+        });
+        const selectedCard = document.querySelector(`[data-location="${locationId}"]`);
+        if (selectedCard) {
+          selectedCard.classList.add('selected');
+        }
+        
+        // Update map markers - reset all to brown first
+        Object.keys(cafeMarkers).forEach(id => {
+          const marker = cafeMarkers[id];
+          if (marker.originalIcon) {
+            marker.setIcon(marker.originalIcon);
+          }
+        });
+        
+        // Set selected marker to blue
+        selectedMarker = cafeMarkers[locationId];
+        if (selectedMarker) {
+          // Create blue icon for selected marker
+          const blueIcon = L.divIcon({
+            className: 'cafe-marker-selected',
+            html: '☕',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
+          });
+          selectedMarker.setIcon(blueIcon);
+        }
+        
+        // Populate location details
+        document.getElementById('selectedLocationName').textContent = location.name;
+        document.getElementById('selectedLocationAddress').textContent = location.address;
+        document.getElementById('selectedDistance').textContent = location.distance;
+        
+        // Update wait time with color coding
+        const waitTimeElement = document.getElementById('selectedWaitTime');
+        waitTimeElement.textContent = location.waitTime;
+        
+        if (location.waitTimeValue > 5) {
+          waitTimeElement.className = 'text-danger';
+        } else if (location.waitTimeValue > 3) {
+          waitTimeElement.className = 'text-warning';
+        } else {
+          waitTimeElement.className = 'text-success';
+        }
+        
+        // Show warnings
+        showWarnings(location);
+        
+        // Show location confirmation section
+        document.getElementById('locationConfirmation').style.display = 'block';
+        
+        // Reset service selection
+        selectedService = null;
+        document.querySelectorAll('.service-option').forEach(option => {
+          option.classList.remove('selected');
+        });
+        document.getElementById('confirmLocationBtn').disabled = true;
+      }
+      
+      // Show warnings for selected location
+      function showWarnings(location) {
+        const warningsSection = document.getElementById('warningsSection');
+        warningsSection.innerHTML = '';
+        
+        const warnings = [];
+        
+        // Check for out of stock items
+        if (location.outOfStock.length > 0) {
+          warnings.push(`Some items may be unavailable: ${location.outOfStock.join(', ')}`);
+        }
+        
+        // Check for long wait times
+        if (location.waitTimeValue > 5) {
+          warnings.push(`Wait time exceeds 5 minutes (${location.waitTime})`);
+        }
+        
+        // Add other warnings
+        warnings.push(...location.otherWarnings);
+        
+        // Display warnings
+        if (warnings.length > 0) {
+          warnings.forEach(warning => {
+            const warningDiv = document.createElement('div');
+            warningDiv.className = 'warning-alert';
+            warningDiv.innerHTML = `
+              <div class="d-flex align-items-center">
+                <span class="me-2">⚠️</span>
+                <span>${warning}</span>
+              </div>
+            `;
+            warningsSection.appendChild(warningDiv);
+          });
+        }
+      }
+      
+      // Select service type
+      function selectService(serviceType) {
+        selectedService = serviceType;
+        
+        // Update UI selection
+        document.querySelectorAll('.service-option').forEach(option => {
+          option.classList.remove('selected');
+        });
+        document.querySelector(`[data-service="${serviceType}"]`).classList.add('selected');
+        
+        // Enable confirmation button
+        document.getElementById('confirmLocationBtn').disabled = false;
+      }
+      
+      // Get directions to location
+      function getDirections() {
+        if (selectedLocationId) {
+          const location = locations[selectedLocationId];
+          // Open Google Maps with directions from user location to selected cafe
+          const googleMapsUrl = `https://www.google.com/maps/dir/${userLocation.lat},${userLocation.lng}/${location.lat},${location.lng}`;
+          window.open(googleMapsUrl, '_blank');
+        }
+      }
+      
+      // Change location (go back to search)
+      function changeLocation() {
+        document.getElementById('locationConfirmation').style.display = 'none';
+        selectedLocationId = null;
+        selectedService = null;
+        
+        // Reset selections
+        document.querySelectorAll('.location-card').forEach(card => {
+          card.classList.remove('selected');
+        });
+        
+        // Reset map marker selection - set all back to brown
+        Object.keys(cafeMarkers).forEach(id => {
+          const marker = cafeMarkers[id];
+          if (marker.originalIcon) {
+            marker.setIcon(marker.originalIcon);
+          }
+        });
+        selectedMarker = null;
+        
+        // Reset map view to show all locations
+        const group = L.featureGroup(Object.values(cafeMarkers));
+        group.addLayer(userMarker);
+        map.fitBounds(group.getBounds().pad(0.1));
+      }
+      
+      // Confirm location and service selection
+      function confirmLocation() {
+        if (!selectedLocationId || !selectedService) {
+          return;
+        }
+        
+        const location = locations[selectedLocationId];
+        
+        // Update modal content
+        document.getElementById('modalLocationName').textContent = location.name;
+        document.getElementById('modalServiceType').textContent = 
+          selectedService.charAt(0).toUpperCase() + selectedService.slice(1).replace('-', ' ');
+        document.getElementById('modalWaitTime').textContent = location.waitTime;
+        
+        // Show confirmation modal
+        const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+        modal.show();
+      }
+      
+      // Proceed to menu
+      function proceedToMenu() {
+        // In a real implementation, this would redirect to the menu page
+        // For now, we'll redirect to the menu page in the dropdowns folder
+        window.location.href = '../dropdowns/menu.html';
+      }
+      
+      // Show all locations (reset search)
+      function showAllLocations() {
+        // Clear search input
+        document.getElementById('locationSearch').value = '';
+        
+        // Update distances
+        updateDistances();
+        
+        // Show all locations
+        document.getElementById('noResults').style.display = 'none';
+        document.getElementById('searchResults').style.display = 'block';
+        
+        // Display all locations
+        const allLocations = Object.keys(locations).map(id => ({
+          id: id,
+          ...locations[id]
+        }));
+        
+        displayFilteredResults(allLocations, 'all locations');
+        
+        // Show all markers on map
+        Object.keys(cafeMarkers).forEach(locationId => {
+          if (!map.hasLayer(cafeMarkers[locationId])) {
+            map.addLayer(cafeMarkers[locationId]);
+          }
+        });
+        
+        // Fit map to show all locations
+        const group = L.featureGroup(Object.values(cafeMarkers));
+        group.addLayer(userMarker);
+        map.fitBounds(group.getBounds().pad(0.1));
+      }
+      
+      // Allow Enter key to trigger search
+      document.getElementById('locationSearch').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          searchLocations();
+        }
+      });
+    </script>
   </body>
 </html>
