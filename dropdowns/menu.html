@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -16,9 +17,8 @@
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand">The Black Squirrel Cafe | </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-          data-bs-target="#navbarCollapse" aria-controls="navbarCollapse"
-          aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+          aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -44,59 +44,171 @@
 
   <!-- MAIN CONTENT -->
   <main class="container flex-fill" style="padding-top: 100px; max-width: 800px;">
-    <h1 class="display-5 fw-bold mb-4 text-center text-light">Our Menu</h1>
+    <h1 class="display-5 fw-bold mb-4 text-center text-light">Menu</h1>
 
     <!-- =========== SEASONAL =========== -->
     <div class="mb-4">
-      <button class="btn" style="background-color: rgb(136, 68, 9); color: rgb(255, 255, 255); width: 100%; display: flex; justify-content: space-between; align-items: center;"
-              type="button" data-bs-toggle="collapse" data-bs-target="#seasonalCollapse">
+      <button class="btn" style="background-color: rgb(136, 68, 9); color: white; width: 100%; display: flex; justify-content: space-between; align-items: center;"
+        type="button" data-bs-toggle="collapse" data-bs-target="#seasonalCollapse">
         <span class="fs-4 fw-semibold">Seasonal</span>
         <span class="bi bi-chevron-down"></span>
       </button>
-      <div class="collapse mt-3 bg-white p-3" id="seasonalCollapse">
+      <div class="collapse show mt-3 bg-white p-3" id="seasonalCollapse">
         <h6 class="fw-semibold mb-2">Food</h6>
         <ul class="list-group mb-3 border-0">
-          <li class="list-group-item border-0">Pumpkin Donut</li>
-        </ul>
+          <!-- Pumpkin Donut -->
+          <li class="list-group-item border-0">
+            <div class="d-flex align-items-center">
+              <img src="../images/pumpkinDoughnut.png" class="me-3"
+                style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">Pumpkin Donut</h6>
+              </div>
+              <button class="btn btn-sm btn-primary">Add to Cart</button>
+            </div>
+          </li>
 
+        </ul>
         <h6 class="fw-semibold mb-2">Drinks</h6>
         <ul class="list-group border-0">
-          <li class="list-group-item border-0">Pumpkin Spice Latte</li>
-          <li class="list-group-item border-0">Apple Tea</li>
+          <!-- Pumpkin Spice Latte -->
+          <li class="list-group-item border-0">
+            <div class="d-flex align-items-center">
+              <img src="../images/pumpkinSpiceLatte.png" class="me-3"
+                style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">Pumpkin Spice Latte</h6>
+              </div>
+              <button class="btn btn-sm btn-primary">Add to Cart</button>
+            </div>
+          </li>
+          <!-- Apple Tea -->
+          <li class="list-group-item border-0">
+            <div class="d-flex align-items-center">
+              <img src="../images/appleTea.png" class="me-3"
+                style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">Apple Tea</h6>
+              </div>
+              <button class="btn btn-sm btn-primary">Add to Cart</button>
+            </div>
+          </li>
         </ul>
       </div>
     </div>
 
     <!-- =========== FOOD =========== -->
     <div class="mb-4">
-      <button class="btn btn-light border w-100 d-flex justify-content-between align-items-center"
-              type="button" data-bs-toggle="collapse" data-bs-target="#foodCollapse">
+      <button class="btn btn-light border w-100 d-flex justify-content-between align-items-center" type="button"
+        data-bs-toggle="collapse" data-bs-target="#foodCollapse">
         <span class="fs-4 fw-semibold">Food</span>
         <span class="bi bi-chevron-down"></span>
       </button>
-      <div class="collapse mt-3 bg-white p-3" id="foodCollapse">
+      <div class="collapse show mt-3 bg-white p-3" id="foodCollapse">
         <ul class="list-group border-0">
-          <li class="list-group-item border-0">Brownie</li>
-          <li class="list-group-item border-0">Blueberry Muffin</li>
-          <li class="list-group-item border-0">Glazed Donut</li>
+          <!-- Brownie -->
+          <li class="list-group-item border-0">
+            <div class="d-flex align-items-center">
+              <img src="../images/brownie.png" class="me-3"
+                style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">Brownie</h6>
+              </div>
+              <button class="btn btn-sm btn-primary">Add to Cart</button>
+            </div>
+          </li>
+          <!-- Blueberry Muffin -->
+          <li class="list-group-item border-0">
+            <div class="d-flex align-items-center">
+              <img src="../images/blueberryMuffin.png" class="me-3"
+                style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">Blueberry Muffin</h6>
+              </div>
+              <button class="btn btn-sm btn-primary">Add to Cart</button>
+            </div>
+          </li>
+          <!-- Glazed Donut -->
+          <li class="list-group-item border-0">
+            <div class="d-flex align-items-center">
+              <img src="../images/glazedDoughnut.png" class="me-3"
+                style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">Glazed Donut</h6>
+              </div>
+              <button class="btn btn-sm btn-primary">Add to Cart</button>
+            </div>
+          </li>
+
         </ul>
       </div>
     </div>
 
     <!-- =========== DRINKS =========== -->
     <div class="mb-4">
-      <button class="btn btn-light border w-100 d-flex justify-content-between align-items-center"
-              type="button" data-bs-toggle="collapse" data-bs-target="#drinksCollapse">
+      <button class="btn btn-light border w-100 d-flex justify-content-between align-items-center" type="button"
+        data-bs-toggle="collapse" data-bs-target="#drinksCollapse">
         <span class="fs-4 fw-semibold">Drinks</span>
         <span class="bi bi-chevron-down"></span>
       </button>
-      <div class="collapse mt-3 bg-white p-3" id="drinksCollapse">
+      <div class="collapse show mt-3 bg-white p-3" id="drinksCollapse">
         <ul class="list-group border-0">
-          <li class="list-group-item border-0">Black Coffee</li>
-          <li class="list-group-item border-0">Iced Coffee</li>
-          <li class="list-group-item border-0">Matcha</li>
-          <li class="list-group-item border-0">Black Tea</li>
-          <li class="list-group-item border-0">Green Tea</li>
+          <!-- Black Coffee -->
+          <li class="list-group-item border-0">
+            <div class="d-flex align-items-center">
+              <img src="../images/blackCofee.png" class="me-3"
+                style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">Black Coffee</h6>
+              </div>
+              <button class="btn btn-sm btn-primary">Add to Cart</button>
+            </div>
+          </li>
+          <!-- Iced Coffee -->
+          <li class="list-group-item border-0">
+            <div class="d-flex align-items-center">
+              <img src="../images/icedCoffee.png" class="me-3"
+                style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">Iced Coffee</h6>
+              </div>
+              <button class="btn btn-sm btn-primary">Add to Cart</button>
+            </div>
+          </li>
+          <!-- Matcha -->
+          <li class="list-group-item border-0">
+            <div class="d-flex align-items-center">
+              <img src="../images/matchaLatte.png" class="me-3"
+                style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">Matcha</h6>
+              </div>
+              <button class="btn btn-sm btn-primary">Add to Cart</button>
+            </div>
+          </li>
+          <!-- Black Tea -->
+          <li class="list-group-item border-0">
+            <div class="d-flex align-items-center">
+              <img src="../images/blackTea.png" class="me-3"
+                style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">Black Tea</h6>
+              </div>
+              <button class="btn btn-sm btn-primary">Add to Cart</button>
+            </div>
+          </li>
+          <!-- Green Tea -->
+          <li class="list-group-item border-0">
+            <div class="d-flex align-items-center">
+              <img src="../images/greenTea.png" class="me-3"
+                style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">Green Tea</h6>
+              </div>
+              <button class="btn btn-sm btn-primary">Add to Cart</button>
+            </div>
+          </li>
+
         </ul>
       </div>
     </div>
@@ -119,4 +231,5 @@
 
   <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
