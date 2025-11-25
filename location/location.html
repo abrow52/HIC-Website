@@ -301,8 +301,9 @@
           lng: -81.34222884363092,
           waitTime: "8 minutes",
           waitTimeValue: 8,
+          hasDriveThru: false,
           outOfStock: ["Espresso Blend"],
-          otherWarnings: []
+          otherWarnings: ["No Drive Thru"]
         },
         2: {
           name: "Black Squirrel Cafe Main Street",
@@ -311,6 +312,7 @@
           lng: -81.34472058073035,
           waitTime: "3 minutes",
           waitTimeValue: 3,
+          hasDriveThru: true,
           outOfStock: [],
           otherWarnings: []
         },
@@ -321,13 +323,14 @@
           lng: -81.35691026999143,
           waitTime: "2 minutes",
           waitTimeValue: 2,
+          hasDriveThru: false,
           outOfStock: [],
-          otherWarnings: ["Limited seating available"]
+          otherWarnings: ["Limited seating available", "No Drive Thru"]
         }
       };
       
-      // Kent, Ohio coordinates (user's default location)
-      const userLocation = {
+      // Default fallback location (Kent, Ohio). Will be replaced by geolocation if permitted.
+      let userLocation = {
         lat: 41.14477475842464,
         lng: -81.34139666280572
       };
@@ -341,14 +344,43 @@
       let selectedLocationId = null;
       let selectedService = null;
       
-      // Initialize map when page loads
+      // Initialize app when page loads (attempt geolocation then init map)
       document.addEventListener('DOMContentLoaded', function() {
-        initializeMap();
+        initApp();
       });
+
+      function initApp() {
+        if ('geolocation' in navigator) {
+          const geoOptions = { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 };
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+              };
+              initializeMap();
+              updateDistances();
+              updateLocationCards();
+            },
+            (error) => {
+              // Fallback to default if permission denied or error
+              initializeMap();
+              updateDistances();
+              updateLocationCards();
+            },
+            geoOptions
+          );
+        } else {
+          // Geolocation unsupported
+          initializeMap();
+          updateDistances();
+          updateLocationCards();
+        }
+      }
       
       // Initialize the map
       function initializeMap() {
-        // Create map centered on Kent, Ohio
+        // Create map centered on user's location (or fallback)
         map = L.map('map').setView([userLocation.lat, userLocation.lng], 13);
         
         // Add simplified map tiles (CartoDB Positron)
@@ -368,18 +400,60 @@
         
         userMarker = L.marker([userLocation.lat, userLocation.lng], {icon: userIcon})
           .addTo(map)
-          .bindPopup('Your Location (Kent, OH)')
-          .openPopup();
-        
-        // Close popup after 2 seconds
-        setTimeout(() => {
-          userMarker.closePopup();
-        }, 2000);
+          .bindPopup(`
+            <div class="text-center">
+              <div class="mb-1"><strong>Your Location</strong></div>
+              <button class="btn btn-primary btn-sm" onclick="useMyLocation()">Use My Location</button>
+            </div>
+          `);
         
         // Add cafe markers
         Object.keys(locations).forEach(locationId => {
           addCafeMarker(locationId, locations[locationId]);
         });
+
+        // Fit map to show user and all cafe markers
+        fitMapToAllMarkers();
+      }
+
+      // Fit the map view to include the user marker and all cafe markers
+      function fitMapToAllMarkers() {
+        if (!map) return;
+        const markers = [];
+        if (userMarker) markers.push(userMarker);
+        Object.values(cafeMarkers).forEach(m => markers.push(m));
+        if (markers.length > 0) {
+          const group = L.featureGroup(markers);
+          map.fitBounds(group.getBounds().pad(0.1));
+        }
+      }
+      
+      // Re-request geolocation and update map/distances
+      function useMyLocation() {
+        if (!('geolocation' in navigator)) {
+          return;
+        }
+        const geoOptions = { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 };
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            userLocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            if (userMarker) {
+              userMarker.setLatLng([userLocation.lat, userLocation.lng]);
+            }
+            if (map) {
+              fitMapToAllMarkers();
+            }
+            updateDistances();
+            updateLocationCards();
+          },
+          (error) => {
+            // No-op on error; keep current fallback/user position
+          },
+          geoOptions
+        );
       }
       
       // Add a cafe marker to the map
@@ -653,6 +727,9 @@
         // Show warnings
         showWarnings(location);
         
+        // Update service options visibility based on location capabilities
+        updateServiceOptions(location);
+        
         // Show location confirmation section
         document.getElementById('locationConfirmation').style.display = 'block';
         
@@ -662,6 +739,23 @@
           option.classList.remove('selected');
         });
         document.getElementById('confirmLocationBtn').classList.remove('visible');
+      }
+
+      // Show/hide service options based on location capabilities
+      function updateServiceOptions(location) {
+        const driveThruCard = document.querySelector('.service-option[data-service="drive-thru"]');
+        if (!driveThruCard) return;
+        const driveThruCol = driveThruCard.closest('.col-md-4') || driveThruCard;
+        if (location.hasDriveThru) {
+          driveThruCol.style.display = '';
+        } else {
+          // If previously selected, reset selection
+          if (selectedService === 'drive-thru') {
+            selectedService = null;
+            document.getElementById('confirmLocationBtn').classList.remove('visible');
+          }
+          driveThruCol.style.display = 'none';
+        }
       }
       
       // Show warnings for selected location
